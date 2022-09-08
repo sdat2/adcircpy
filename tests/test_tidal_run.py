@@ -20,15 +20,15 @@ from tests import (
 )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='test fails on Python < 3.7')
+@pytest.mark.skipif(sys.version_info < (3, 7), reason="test fails on Python < 3.7")
 def test_tidal_run(shinnecock_mesh_directory):
-    output_directory = OUTPUT_DIRECTORY / 'test_tidal_run'
-    reference_directory = REFERENCE_DIRECTORY / 'test_tidal_run'
+    output_directory = OUTPUT_DIRECTORY / "test_tidal_run"
+    reference_directory = REFERENCE_DIRECTORY / "test_tidal_run"
 
     if not output_directory.exists():
         output_directory.mkdir(parents=True, exist_ok=True)
 
-    mesh = AdcircMesh.open(shinnecock_mesh_directory / 'fort.14', crs=4326)
+    mesh = AdcircMesh.open(shinnecock_mesh_directory / "fort.14", crs=4326)
 
     tidal_forcing = Tides()
     tidal_forcing.use_all()
@@ -43,7 +43,7 @@ def test_tidal_run(shinnecock_mesh_directory):
     )
     driver.timestep = 10.0
 
-    if shutil.which('padcirc') is not None:
+    if shutil.which("padcirc") is not None:
         driver.run(output_directory, nproc=2, overwrite=True)
     else:
         driver.write(output_directory, nproc=2, overwrite=True)
@@ -51,42 +51,42 @@ def test_tidal_run(shinnecock_mesh_directory):
     check_reference_directory(
         output_directory,
         reference_directory,
-        skip_lines={'fort.15': [0, *range(32, 47, 2), *range(49, 64, 2), -2]},
+        skip_lines={"fort.15": [0, *range(32, 47, 2), *range(49, 64, 2), -2]},
     )
 
 
-@pytest.mark.skipif(sys.version_info < (3, 7), reason='test fails on Python < 3.7')
+@pytest.mark.skipif(sys.version_info < (3, 7), reason="test fails on Python < 3.7")
 def test_tidal_run_cli(shinnecock_mesh_directory, mocker):
-    output_directory = OUTPUT_DIRECTORY / 'test_tidal_run_cli'
-    reference_directory = REFERENCE_DIRECTORY / 'test_tidal_run_cli'
+    output_directory = OUTPUT_DIRECTORY / "test_tidal_run_cli"
+    reference_directory = REFERENCE_DIRECTORY / "test_tidal_run_cli"
 
     if not output_directory.exists():
         output_directory.mkdir(parents=True, exist_ok=True)
 
     cmd = [
-        'tidal_run',
+        "tidal_run",
         f'{shinnecock_mesh_directory / "fort.14"}',
         f"{datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%M:%S')}",
-        '0.5',
-        '--spinup-days=0.5',
-        '--crs=EPSG:4326',
-        f'--output-directory={output_directory}',
-        '--constituents=all',
-        '--overwrite',
-        '--timestep=10.',
-        '--nproc=2',
+        "0.5",
+        "--spinup-days=0.5",
+        "--crs=EPSG:4326",
+        f"--output-directory={output_directory}",
+        "--constituents=all",
+        "--overwrite",
+        "--timestep=10.",
+        "--nproc=2",
     ]
-    if shutil.which('padcirc') is None:
-        if shutil.which('adcirc') is not None:
-            cmd.append('--nproc=1')
+    if shutil.which("padcirc") is None:
+        if shutil.which("adcirc") is not None:
+            cmd.append("--nproc=1")
         else:
-            cmd.append('--skip-run')
-    mocker.patch('sys.argv', cmd)
+            cmd.append("--skip-run")
+    mocker.patch("sys.argv", cmd)
 
     tidal_run.main()
 
     check_reference_directory(
         output_directory,
         reference_directory,
-        skip_lines={'fort.15': [0, *range(32, 47, 2), *range(49, 64, 2), -2]},
+        skip_lines={"fort.15": [0, *range(32, 47, 2), *range(49, 64, 2), -2]},
     )

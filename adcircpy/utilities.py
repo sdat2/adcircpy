@@ -16,10 +16,14 @@ def download_mesh(
     if not directory.exists():
         directory.mkdir(parents=True, exist_ok=True)
 
-    if not (directory / 'fort.14').exists() or overwrite:
-        logging.info(f'downloading mesh files to {directory}')
+    if not (directory / "fort.14").exists() or overwrite:
+        logging.info(f"downloading mesh files to {directory}")
         extract_download(
-            url, directory, ['fort.13', 'fort.14'], known_hash=known_hash, overwrite=overwrite
+            url,
+            directory,
+            ["fort.13", "fort.14"],
+            known_hash=known_hash,
+            overwrite=overwrite,
         )
 
     return directory
@@ -41,10 +45,12 @@ def extract_download(
     if not directory.exists():
         directory.mkdir(parents=True, exist_ok=True)
 
-    temporary_filename = directory / 'temp.tar.gz'
-    logging.debug(f'downloading {url} -> {temporary_filename}')
-    temporary_filename = pooch.retrieve(url, known_hash=known_hash, fname=temporary_filename)
-    logging.debug(f'extracting {temporary_filename} -> {directory}')
+    temporary_filename = directory / "temp.tar.gz"
+    logging.debug(f"downloading {url} -> {temporary_filename}")
+    temporary_filename = pooch.retrieve(
+        url, known_hash=known_hash, fname=temporary_filename
+    )
+    logging.debug(f"extracting {temporary_filename} -> {directory}")
     with tarfile.open(temporary_filename) as local_file:
         if len(filenames) > 0:
             for filename in filenames:
@@ -74,7 +80,7 @@ def get_logger(
     # check if logger is already configured
     if logger.level == logging.NOTSET and len(logger.handlers) == 0:
         # check if logger has a parent
-        if '.' in name:
+        if "." in name:
             if isinstance(logger.parent, logging.RootLogger):
                 for existing_console_handler in [
                     handler
@@ -82,7 +88,7 @@ def get_logger(
                     if not isinstance(handler, logging.FileHandler)
                 ]:
                     logger.parent.removeHandler(existing_console_handler)
-            logger.parent = get_logger(name.rsplit('.', 1)[0])
+            logger.parent = get_logger(name.rsplit(".", 1)[0])
         else:
             # otherwise create a new split-console logger
             if console_level != logging.NOTSET:
@@ -101,13 +107,15 @@ def get_logger(
         file_handler = logging.FileHandler(log_filename)
         file_handler.setLevel(file_level)
         for existing_file_handler in [
-            handler for handler in logger.handlers if isinstance(handler, logging.FileHandler)
+            handler
+            for handler in logger.handlers
+            if isinstance(handler, logging.FileHandler)
         ]:
             logger.removeHandler(existing_file_handler)
         logger.addHandler(file_handler)
 
     if log_format is None:
-        log_format = '[%(asctime)s] %(name)-15s %(levelname)-8s: %(message)s'
+        log_format = "[%(asctime)s] %(name)-15s %(levelname)-8s: %(message)s"
     log_formatter = logging.Formatter(log_format)
     for handler in logger.handlers:
         handler.setFormatter(log_formatter)

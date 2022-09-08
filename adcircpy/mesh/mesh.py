@@ -25,7 +25,7 @@ class ModelForcings:
                 self.tides = forcing
             else:
                 raise NotImplementedError(
-                    f'Unhandled boundary condition of type {type(forcing)}.'
+                    f"Unhandled boundary condition of type {type(forcing)}."
                 )
 
         elif isinstance(forcing, WindForcing):
@@ -35,10 +35,10 @@ class ModelForcings:
             self.wave = forcing
 
         else:
-            msg = f'Unrecognized forcing type {forcing}.'
+            msg = f"Unrecognized forcing type {forcing}."
             raise Exception(msg)
 
-    def __eq__(self, other: 'ModelForcings') -> bool:
+    def __eq__(self, other: "ModelForcings") -> bool:
         return self.__class__ == other.__class__ and self.__dict__ == other.__dict__
 
 
@@ -57,21 +57,21 @@ class NodalAttributeDescriptor:
 
 class AdcircMeshMeta(type):
     adcirc_nodal_attributes = [
-        'primitive_weighting_in_continuity_equation',
-        'surface_submergence_state',
-        'quadratic_friction_coefficient_at_sea_floor',
-        'surface_directional_effective_roughness_length',
-        'surface_canopy_coefficient',
-        'bridge_pilings_friction_parameters',
-        'mannings_n_at_sea_floor',
-        'chezy_friction_coefficient_at_sea_floor',
-        'sea_surface_height_above_geoid',
-        'bottom_roughness_length',
-        'wave_refraction_in_swan',
-        'average_horizontal_eddy_viscosity_in_sea_water_wrt_depth',
-        'elemental_slope_limiter',
-        'advection_state',
-        'initial_river_elevation',
+        "primitive_weighting_in_continuity_equation",
+        "surface_submergence_state",
+        "quadratic_friction_coefficient_at_sea_floor",
+        "surface_directional_effective_roughness_length",
+        "surface_canopy_coefficient",
+        "bridge_pilings_friction_parameters",
+        "mannings_n_at_sea_floor",
+        "chezy_friction_coefficient_at_sea_floor",
+        "sea_surface_height_above_geoid",
+        "bottom_roughness_length",
+        "wave_refraction_in_swan",
+        "average_horizontal_eddy_viscosity_in_sea_water_wrt_depth",
+        "elemental_slope_limiter",
+        "advection_state",
+        "initial_river_elevation",
     ]
 
     def __new__(meta, name, bases, attrs):
@@ -181,9 +181,9 @@ class AdcircMesh(metaclass=AdcircMeshMeta):
         3) Assigns a tau0 value based on depth and rep. distance.
         Asssumes threshold_distance is given in meters.
         """
-        msg = 'Cannot compute TAU0 with nan depth values.'
+        msg = "Cannot compute TAU0 with nan depth values."
         assert not np.any(np.isnan(self.values)), msg
-        msg = 'Cannot compute TAU0 with no coordinate reference system set.'
+        msg = "Cannot compute TAU0 with no coordinate reference system set."
         assert self.crs is not None, msg
         points = self.get_xy(3395)
         values = np.full(self.values.shape, default_value)
@@ -215,8 +215,8 @@ class AdcircMesh(metaclass=AdcircMeshMeta):
 
     @property
     def node_distances_in_meters(self):
-        if not hasattr(self, '_node_distances_in_meters'):
-            points = self.get_xy('EPSG:4326')
+        if not hasattr(self, "_node_distances_in_meters"):
+            points = self.get_xy("EPSG:4326")
             self._node_distances_in_meters = {}
             for k, v in self.node_neighbors.items():
                 x0, y0 = points.iloc[k].values
@@ -230,7 +230,7 @@ class AdcircMesh(metaclass=AdcircMeshMeta):
 
     @property
     def node_neighbors(self):
-        if not hasattr(self, '_node_neighbors'):
+        if not hasattr(self, "_node_neighbors"):
             self._node_neighbors = defaultdict(set)
             for simplex in self.triangulation.triangles:
                 for i, j in permutations(simplex, 2):
@@ -243,7 +243,7 @@ class AdcircMesh(metaclass=AdcircMeshMeta):
         instance.nodal_attributes = self.nodal_attributes
         return instance
 
-    def __eq__(self, other: 'AdcircMesh') -> bool:
+    def __eq__(self, other: "AdcircMesh") -> bool:
         return (
             super().__eq__(other)
             and self.forcings == other.forcings

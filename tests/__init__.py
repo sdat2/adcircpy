@@ -8,19 +8,19 @@ import pytest
 
 from adcircpy.utilities import download_mesh
 
-DATA_DIRECTORY = Path(__file__).parent.absolute().resolve() / 'data'
-INPUT_DIRECTORY = DATA_DIRECTORY / 'input'
-OUTPUT_DIRECTORY = DATA_DIRECTORY / 'output'
-REFERENCE_DIRECTORY = DATA_DIRECTORY / 'reference'
+DATA_DIRECTORY = Path(__file__).parent.absolute().resolve() / "data"
+INPUT_DIRECTORY = DATA_DIRECTORY / "input"
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output"
+REFERENCE_DIRECTORY = DATA_DIRECTORY / "reference"
 
 
 @pytest.fixture
 def shinnecock_mesh_directory(worker_id) -> Path:
-    mesh_directory = INPUT_DIRECTORY / 'shinnecock'
+    mesh_directory = INPUT_DIRECTORY / "shinnecock"
     download_mesh(
-        url='https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1',
+        url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",
         directory=mesh_directory,
-        known_hash='99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4',
+        known_hash="99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4",
     )
 
     return mesh_directory
@@ -46,7 +46,9 @@ def check_reference_directory(
         else:
             test_filename = test_directory / reference_filename.name
 
-            with open(test_filename) as test_file, open(reference_filename) as reference_file:
+            with open(test_filename) as test_file, open(
+                reference_filename
+            ) as reference_file:
                 test_lines = list(test_file.readlines())
                 reference_lines = list(reference_file.readlines())
 
@@ -59,7 +61,8 @@ def check_reference_directory(
                     ):
                         try:
                             lines_to_skip.update(
-                                line_index % len(test_lines) for line_index in line_indices
+                                line_index % len(test_lines)
+                                for line_index in line_indices
                             )
                         except ZeroDivisionError:
                             continue
@@ -68,6 +71,6 @@ def check_reference_directory(
                     del test_lines[line_index], reference_lines[line_index]
 
                 cwd = Path.cwd()
-                assert '\n'.join(test_lines) == '\n'.join(
+                assert "\n".join(test_lines) == "\n".join(
                     reference_lines
                 ), f'"{os.path.relpath(test_filename, cwd)}" != "{os.path.relpath(reference_filename, cwd)}"'

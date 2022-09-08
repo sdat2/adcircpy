@@ -23,7 +23,9 @@ class TidalDataset(ABC):
         :param vertices: XY locations at which to sample (Mx2)
         :return: amplitude and phase arrays at given locations
         """
-        return self.get_amplitude(constituent, vertices), self.get_phase(constituent, vertices)
+        return self.get_amplitude(constituent, vertices), self.get_phase(
+            constituent, vertices
+        )
 
     @abstractmethod
     def get_amplitude(self, constituent: str, vertices: np.ndarray) -> np.ndarray:
@@ -77,7 +79,7 @@ class TidalDataset(ABC):
         """
         assert (
             len(vertices.shape) == 2 and vertices.shape[1] == 2
-        ), 'vertices must be of shape Mx2'
+        ), "vertices must be of shape Mx2"
 
-    def __eq__(self, other: 'TidalDataset') -> bool:
+    def __eq__(self, other: "TidalDataset") -> bool:
         return self.__class__ == other.__class__ and self.__dict__ == other.__dict__

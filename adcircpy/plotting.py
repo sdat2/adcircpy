@@ -33,12 +33,12 @@ def plot_polygon(
     if axis is None:
         axis = pyplot.gca()
 
-    if 'c' not in kwargs:
+    if "c" not in kwargs:
         try:
             color = next(axis._get_lines.color_cycle)
         except AttributeError:
-            color = 'r'
-        kwargs['c'] = color
+            color = "r"
+        kwargs["c"] = color
 
     if isinstance(geometry, dict):
         geometry = shapely_shape(geometry)
@@ -46,7 +46,7 @@ def plot_polygon(
     if type(geometry) is Polygon:
         if fill:
             axis.fill(*geometry.exterior.xy, **kwargs)
-            kwargs['c'] = 'w'
+            kwargs["c"] = "w"
             for interior in geometry.interiors:
                 axis.fill(*interior.xy, **kwargs)
         else:
@@ -88,16 +88,16 @@ def plot_polygons(
     if axis is None:
         axis = pyplot.gca()
 
-    if 'c' in kwargs:
-        colors = [kwargs['c'] for _ in range(len(geometries))]
+    if "c" in kwargs:
+        colors = [kwargs["c"] for _ in range(len(geometries))]
     elif colors is None:
         colors = [
-            get_cmap('gist_rainbow')(color_index / len(geometries))
+            get_cmap("gist_rainbow")(color_index / len(geometries))
             for color_index in range(len(geometries))
         ]
 
     for geometry_index, geometry in enumerate(geometries):
-        kwargs['c'] = colors[geometry_index]
+        kwargs["c"] = colors[geometry_index]
         plot_polygon(geometry=geometry, fill=fill, axis=axis, **kwargs)
 
     if show:
@@ -107,7 +107,11 @@ def plot_polygons(
 
 
 def plot_bounding_box(
-    sw: (float, float), ne: (float, float), axis: Axes = None, show: bool = False, **kwargs,
+    sw: (float, float),
+    ne: (float, float),
+    axis: Axes = None,
+    show: bool = False,
+    **kwargs,
 ) -> Axes:
     """
     Plot the bounding box of the given extent.
@@ -148,16 +152,18 @@ def plot_points(
     """
 
     if type(points) is MultiPoint:
-        points = numpy.squeeze(numpy.stack((point._get_coords() for point in points), axis=0))
+        points = numpy.squeeze(
+            numpy.stack((point._get_coords() for point in points), axis=0)
+        )
 
     if axis is None:
         axis = pyplot.gca()
 
-    if 'c' not in kwargs and points.shape[1] > 2:
-        kwargs['c'] = points[:, index + 2]
+    if "c" not in kwargs and points.shape[1] > 2:
+        kwargs["c"] = points[:, index + 2]
 
-    if 's' not in kwargs:
-        kwargs['s'] = 2
+    if "s" not in kwargs:
+        kwargs["s"] = 2
 
     axis.scatter(points[:, 0], points[:, 1], **kwargs)
 
@@ -168,27 +174,29 @@ def plot_points(
 
 
 def download_coastline(overwrite: bool = False) -> pathlib.Path:
-    data_directory = pathlib.Path(appdirs.user_data_dir('ne_coastline'))
+    data_directory = pathlib.Path(appdirs.user_data_dir("ne_coastline"))
     if not data_directory.exists():
         data_directory.mkdir(exist_ok=True, parents=True)
 
-    coastline_filename = data_directory / 'ne_110m_coastline.shp'
+    coastline_filename = data_directory / "ne_110m_coastline.shp"
 
     if not coastline_filename.exists() or overwrite:
         # download and save if not present
-        url = 'http://naciscdn.org/naturalearth/110m/physical/ne_110m_coastline.zip'
+        url = "http://naciscdn.org/naturalearth/110m/physical/ne_110m_coastline.zip"
         response = requests.get(url, stream=True)
         with zipfile.ZipFile(io.BytesIO(response.content)) as zip_file:
             for member_filename in zip_file.namelist():
                 file_data = zip_file.read(member_filename)
-                with open(data_directory / member_filename, 'wb') as output_file:
+                with open(data_directory / member_filename, "wb") as output_file:
                     output_file.write(file_data)
-        assert coastline_filename.exists(), 'coastline file not downloaded'
+        assert coastline_filename.exists(), "coastline file not downloaded"
 
     return coastline_filename
 
 
-def plot_coastline(axis: Axes = None, show: bool = False, save_filename: PathLike = None):
+def plot_coastline(
+    axis: Axes = None, show: bool = False, save_filename: PathLike = None
+):
     if axis is None:
         figure = pyplot.figure()
         axis = figure.add_subplot(1, 1, 1)

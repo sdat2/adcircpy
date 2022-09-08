@@ -5,11 +5,12 @@ from tests import INPUT_DIRECTORY
 
 
 def test_plot_besttrack(mocker):
-    input_directory = INPUT_DIRECTORY / 'test_plot_besttrack'
+    input_directory = INPUT_DIRECTORY / "test_plot_besttrack"
 
     best_track = BestTrackForcing.from_fort22(
-        input_directory / 'florence2018_atcf.trk', nws=8,
+        input_directory / "florence2018_atcf.trk",
+        nws=8,
     )
 
-    mocker.patch('matplotlib.pyplot.show')
+    mocker.patch("matplotlib.pyplot.show")
     best_track.plot_track(coastline=False)

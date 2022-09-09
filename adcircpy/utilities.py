@@ -32,7 +32,7 @@ def download_mesh(
 def extract_download(
     url: str,
     directory: PathLike,
-    filenames: [str] = None,
+    filenames: str = None,
     known_hash: str = None,
     overwrite: bool = False,
 ):

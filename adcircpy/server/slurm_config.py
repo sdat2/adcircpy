@@ -21,9 +21,9 @@ class SlurmConfig(BaseServerConfig):
         mail_type: str = None,
         mail_user: str = None,
         log_filename: str = None,
-        modules: [str] = None,
+        modules: str = None,
         path_prefix: str = None,
-        extra_commands: [str] = None,
+        extra_commands: str = None,
         launcher: str = "srun",
         nodes: int = None,
     ):

@@ -1,7 +1,7 @@
 import io
 from os import PathLike
 import pathlib
-from typing import Union
+from typing import Union, Tuple
 import zipfile
 
 import appdirs
@@ -69,8 +69,8 @@ def plot_polygon(
 
 
 def plot_polygons(
-    geometries: [Polygon],
-    colors: [str] = None,
+    geometries: Polygon,
+    colors: str = None,
     fill: bool = False,
     axis: Axes = None,
     show: bool = False,
@@ -107,8 +107,8 @@ def plot_polygons(
 
 
 def plot_bounding_box(
-    sw: (float, float),
-    ne: (float, float),
+    sw: Tuple[float, float],
+    ne: Tuple[float, float],
     axis: Axes = None,
     show: bool = False,
     **kwargs,

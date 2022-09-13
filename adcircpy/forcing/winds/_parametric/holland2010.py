@@ -10,7 +10,19 @@ def holland_B(hurdat, coriolis=True):
     # air_density = 1.225
     air_density = 1.15
 
-    def with_coriolis(Vmax, Rmax, Pn, Pc, eye_lat):
+    def with_coriolis(Vmax, Rmax, Pn, Pc, eye_lat) -> float:
+        """
+
+        Args:
+            Vmax (float): "max_sustained_wind_speed"
+            Rmax (float): "radius_of_maximum_winds"
+            Pn (float): "background_pressure"
+            Pc (float): "central_pressure"
+            eye_lat (float): eye latitude.
+
+        Returns:
+            float: _description_
+        """
         f = 2.0 * 7.2921e-5 * np.sin(np.radians(np.abs(eye_lat)))
         return (Vmax**2 + Vmax * Rmax * f * air_density * np.exp(1)) / (Pn - Pc)
 
@@ -40,6 +52,7 @@ def main():
     storm_id = "AL152017"
     # storm_id = 'AL182012'
     hurdat = Bdeck(storm_id).data
+
     for time, data in hurdat.items():
         if len(data["isotachs"].keys()) != 4:
             continue
@@ -94,6 +107,7 @@ def main():
             results = np.array(res)
             plt.plot(radii, results, label=quad)
             # plt.gca().axis('scaled')
+
         plt.legend()
         plt.show()
         plt.close(plt.gcf())

@@ -1,3 +1,10 @@
+"""ADCIRC
+
+Usage::
+    python examples/example_1.py
+
+"""
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 import shutil
@@ -6,11 +13,20 @@ import warnings
 from adcircpy import AdcircMesh, AdcircRun, Tides
 from adcircpy.utilities import download_mesh
 
-DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
-INPUT_DIRECTORY = DATA_DIRECTORY / "input" / "shinnecock"
-OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_1"
+def mkdir(dir):
+    if not os.path.exists(dir):
+        os.mkdir(dir)
 
-MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"
+DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
+mkdir(DATA_DIRECTORY)
+mkdir(DATA_DIRECTORY / "input")
+mkdir(DATA_DIRECTORY / "output")
+INPUT_DIRECTORY = DATA_DIRECTORY / "input" / "shinnecock"
+mkdir(INPUT_DIRECTORY)
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_1"
+mkdir(OUTPUT_DIRECTORY)
+MESH_DIRECTORY = INPUT_DIRECTORY  # / "shinnecock"
+
 
 download_mesh(
     url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",

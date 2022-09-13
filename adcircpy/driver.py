@@ -649,6 +649,28 @@ class AdcircRun(Fort15):
 
         return err
 
+    def _run_adcirc(self, rundir):
+        cmd = list()
+        cmd.append("adcirc")
+        err = self._launch_command(cmd, rundir)
+        msg = "** ERROR: Elevation.gt.ErrorElev, ADCIRC stopping. **"
+        if msg in "".join(err):
+            print(msg)
+            self._handle_blowup(err)
+
+        # filter IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+        msg = "Note: The following floating-point exceptions are signalling:"
+        err = [line for line in err if msg not in line]
+        if len(err) > 0:
+            if msg not in "".join(err):
+                msg = "\n"
+                msg += "".join(err)
+                raise Exception(msg)
+            else:
+                raise Exception(msg)
+
+        return err
+
     def _run_local(self, nproc, outdir, overwrite, coldstart, hotstart):
         self.write(outdir, overwrite, driver=None)
         if self.spinup_time > timedelta(seconds=0):
@@ -686,7 +708,10 @@ class AdcircRun(Fort15):
     def _run_single_phase(self, nproc, wdir):
         # "single phase" means not separated into coldstart/hotstart
         self._run_adcprep("./", nproc, wdir)
-        self._run_padcirc(wdir, nproc)
+        if nproc > 1:
+            self._run_padcirc(wdir, nproc)
+        else:
+            self._run_adcirc(wdir)
 
     def _stage_files(self, runtype, nproc, wdir):
 
@@ -720,7 +745,8 @@ class AdcircRun(Fort15):
             self._launch_command(cmd + ["--prepall"], cwdir)
 
         else:
-            raise NotImplementedError("run serial")
+            # raise NotImplementedError("run serial")
+            print("ok")
 
     def _certify_station(self, physical_var, station_name, vertices):
         keys = list(self._container["stations"][physical_var].keys())
@@ -735,7 +761,7 @@ class AdcircRun(Fort15):
 
     def _handle_blowup(self, err):
         data = self._get_blowup_data(err)
-        # TODOL: There's an ambiguety here, we don't know if ADCIRC is
+        # TODO: There's an ambiguety here, we don't know if ADCIRC is
         # reporting the FORTRAN index or the node hash. We assume the former
         # case here.
         idx = np.asarray(data["maxele_node"]) - 1

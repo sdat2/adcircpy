@@ -1,3 +1,18 @@
+"""Holland 2010 implementation
+
+@article{holland2010revised,
+  title={A revised model for radial profiles of hurricane winds},
+  author={Holland, Greg J and Belanger, James I and Fritz, Angela},
+  journal={Monthly weather review},
+  volume={138},
+  number={12},
+  pages={4393--4401},
+  year={2010},
+  doi={10.1175/2010MWR3317.1}
+}
+
+"""
+
 import warnings
 
 import matplotlib.pyplot as plt

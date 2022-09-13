@@ -661,6 +661,7 @@ class AdcircRun(Fort15):
         # filter IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
         msg = "Note: The following floating-point exceptions are signalling:"
         err = [line for line in err if msg not in line]
+
         if len(err) > 0:
             if msg not in "".join(err):
                 msg = "\n"
@@ -685,7 +686,10 @@ class AdcircRun(Fort15):
     def _run_coldstart(self, nproc, wdir):
         self._stage_files("coldstart", nproc, wdir)
         self._run_adcprep("coldstart", nproc, wdir)
-        self._run_padcirc(wdir / "coldstart", nproc)
+        if nproc > 1:
+            self._run_padcirc(wdir / "coldstart", nproc)
+        else:
+            self._run_adcirc(wdir / "coldstart")
 
     def _run_hotstart(self, nproc, wdir):
         self._stage_files("hotstart", nproc, wdir)
@@ -699,7 +703,10 @@ class AdcircRun(Fort15):
                 msg = "Unknown wave coupling type."
                 raise NotImplementedError(msg)
         else:
-            self._run_padcirc(wdir / "hotstart", nproc)
+            if nproc > 1:
+                self._run_padcirc(wdir / "hotstart", nproc)
+            else:
+                self._run_adcirc(wdir / "hotstart")
 
     def _run_aswip(self, wdir):
         subprocess.check_call(["aswip"], cwd=wdir)

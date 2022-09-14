@@ -12,9 +12,7 @@
 }
 
 """
-
 import warnings
-
 import matplotlib.pyplot as plt
 import numpy as np
 from pyschism.forcing.winds.atcf import Bdeck

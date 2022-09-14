@@ -91,6 +91,18 @@ best_track_run \
     --mete=30. \
     --velo=30. \
     --skip-run
+
+
+best_track_run \
+    /Users/simon/adcirc-swan/adcircpy/data/input/fort.14 \
+    Katrina2005 \
+    --crs=EPSG:4326 \
+    --output-directory=/Users/simon/adcirc-swan/adcircpy/data/output \
+    --spinup-days=15.0
+    --elev=30. \
+    --mete=30. \
+    --velo=30. \
+    --skip-run
 ```
 
 Note that the --crs flag is required due to the fort.14 not containing Coordinate Reference System information which is

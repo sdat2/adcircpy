@@ -23,6 +23,12 @@ class SurfaceOutput(metaclass=abc.ABCMeta):
         "fort.63": "zeta",
         "maxele": "zeta_max",
         "time_of_maxele": "time_of_zeta_max",
+        "maxvel": "vel_max",
+        "time_of_maxvel": "time_of_vel_max",
+        "time_of_minpr": "time_of_pressure_min",
+        "minpr": "pressure_min",
+        "maxwvel": "wind_max",
+        "time_of_maxwvel": "time_of_wind_max",
     }
 
     def __init__(self, path, crs=None):

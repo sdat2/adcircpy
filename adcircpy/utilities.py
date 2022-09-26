@@ -4,7 +4,6 @@ from os import PathLike
 from pathlib import Path
 import sys
 import tarfile
-
 import pooch
 
 

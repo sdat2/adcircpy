@@ -23,7 +23,7 @@ agency of the United States federal government. It was majorly developed by [@jr
 
 ## Installation
 
-Please use a virtual environment with Python>=3.6. You may use conda or the OS's Python to provide a virtual environment for
+Please use a virtual environment with Python>=3.6. You may use conda or the OS"s Python to provide a virtual environment for
 the application.
 
 You may install the application though pip. This will install the latest tagged version.
@@ -70,7 +70,7 @@ tide_gen \
     /path/to/your/fort.14 \
     2021-02-26T00:00:00 \
     15 \
-    --mesh-crs='epsg:4326'
+    --mesh-crs="epsg:4326"
 ```
 
 ##### run best-track run for Hurricane Sandy (AL182012)
@@ -98,7 +98,7 @@ best_track_run \
     Katrina2005 \
     --crs=EPSG:4326 \
     --output-directory=/Users/simon/adcirc-swan/adcircpy/data/output \
-    --spinup-days=15.0
+    --spinup-days=15.0 \
     --elev=30. \
     --mete=30. \
     --velo=30. \
@@ -114,7 +114,7 @@ line after excluding the backslashes.
 
 These are two examples for doing quick plots with the package. These are given here as illustrative examples only. There is
 support for more file types than this examples, but the program does not yet support every output input/output file type. As a
-user, you are encouraged to explore what's available and suggest and contribute your improvements.
+user, you are encouraged to explore what"s available and suggest and contribute your improvements.
 <!--pytest-codeblocks:skip-->
 
 ```bash
@@ -151,28 +151,28 @@ from adcircpy.utilities import download_mesh, get_logger
 
 LOGGER = get_logger(__name__)
 
-DATA_DIRECTORY = Path(__file__).parent.absolute() / 'data'
-INPUT_DIRECTORY = DATA_DIRECTORY / 'input' / 'shinnecock'
-OUTPUT_DIRECTORY = DATA_DIRECTORY / 'output' / 'example_1'
+DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
+INPUT_DIRECTORY = DATA_DIRECTORY / "input" / "shinnecock"
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_1"
 
-MESH_DIRECTORY = INPUT_DIRECTORY / 'shinnecock'
+MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"
 
 download_mesh(
-    url='https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1',
+    url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",
     directory=MESH_DIRECTORY,
-    known_hash='99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4',
+    known_hash="99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4",
 )
 
 # open mesh file
-mesh = AdcircMesh.open(MESH_DIRECTORY / 'fort.14', crs=4326)
+mesh = AdcircMesh.open(MESH_DIRECTORY / "fort.14", crs=4326)
 
 # initialize tidal forcing and constituents
 tidal_forcing = Tides()
-tidal_forcing.use_constituent('M2')
-tidal_forcing.use_constituent('N2')
-tidal_forcing.use_constituent('S2')
-tidal_forcing.use_constituent('K1')
-tidal_forcing.use_constituent('O1')
+tidal_forcing.use_constituent("M2")
+tidal_forcing.use_constituent("N2")
+tidal_forcing.use_constituent("S2")
+tidal_forcing.use_constituent("K1")
+tidal_forcing.use_constituent("O1")
 mesh.add_forcing(tidal_forcing)
 
 # set simulation dates
@@ -194,23 +194,23 @@ driver.TOUTGE = 3.8
 driver.TOUTGV = 3.8
 driver.smagorinsky = False
 driver.horizontal_mixing_coefficient = 5.0
-driver.gwce_solution_scheme = 'semi-implicit-legacy'
+driver.gwce_solution_scheme = "semi-implicit-legacy"
 
-if shutil.which('padcirc') is not None:
+if shutil.which("padcirc") is not None:
     driver.run(OUTPUT_DIRECTORY, overwrite=True)
-elif shutil.which('adcirc') is not None:
+elif shutil.which("adcirc") is not None:
     driver.run(OUTPUT_DIRECTORY, overwrite=True, nproc=1)
 else:
     LOGGER.warning(
-        'ADCIRC binaries were not found in PATH. '
-        'ADCIRC will not run. Writing files to disk...'
+        "ADCIRC binaries were not found in PATH. "
+        "ADCIRC will not run. Writing files to disk..."
     )
     driver.write(OUTPUT_DIRECTORY, overwrite=True)
 ```
 
 #### `example_2.py`
 
-The following code is similar to `example_1.py`, above, except it adds a static Manning's N coefficient to the mesh.
+The following code is similar to `example_1.py`, above, except it adds a static Manning"s N coefficient to the mesh.
 
 ```python
 from datetime import datetime, timedelta
@@ -224,34 +224,34 @@ from adcircpy.utilities import download_mesh, get_logger
 
 LOGGER = get_logger(__name__)
 
-DATA_DIRECTORY = Path(__file__).parent.absolute() / 'data'
-INPUT_DIRECTORY = DATA_DIRECTORY / 'input'
-OUTPUT_DIRECTORY = DATA_DIRECTORY / 'output' / 'example_2'
+DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
+INPUT_DIRECTORY = DATA_DIRECTORY / "input"
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_2"
 
-MESH_DIRECTORY = INPUT_DIRECTORY / 'shinnecock'
+MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"
 
 download_mesh(
-    url='https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1',
+    url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",
     directory=MESH_DIRECTORY,
-    known_hash='99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4',
+    known_hash="99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4",
 )
 
 # open mesh file
-mesh = AdcircMesh.open(MESH_DIRECTORY / 'fort.14', crs=4326)
+mesh = AdcircMesh.open(MESH_DIRECTORY / "fort.14", crs=4326)
 
 # generate tau0 factor
 mesh.generate_tau0()
 
-# also add Manning's N to the domain (constant for this example)
+# also add Manning"s N to the domain (constant for this example)
 mesh.mannings_n_at_sea_floor = numpy.full(mesh.values.shape, 0.025)
 
 # initialize tidal forcing and constituents
 tidal_forcing = Tides()
-tidal_forcing.use_constituent('M2')
-tidal_forcing.use_constituent('N2')
-tidal_forcing.use_constituent('S2')
-tidal_forcing.use_constituent('K1')
-tidal_forcing.use_constituent('O1')
+tidal_forcing.use_constituent("M2")
+tidal_forcing.use_constituent("N2")
+tidal_forcing.use_constituent("S2")
+tidal_forcing.use_constituent("K1")
+tidal_forcing.use_constituent("O1")
 mesh.add_forcing(tidal_forcing)
 
 # set simulation dates
@@ -270,14 +270,14 @@ driver.set_velocity_surface_output(sampling_rate=timedelta(minutes=30))
 # override default options
 driver.timestep = 4.0
 
-if shutil.which('padcirc') is not None:
+if shutil.which("padcirc") is not None:
     driver.run(OUTPUT_DIRECTORY, overwrite=True)
-elif shutil.which('adcirc') is not None:
+elif shutil.which("adcirc") is not None:
     driver.run(OUTPUT_DIRECTORY, overwrite=True, nproc=1)
 else:
     LOGGER.warning(
-        'ADCIRC binaries were not found in PATH. '
-        'ADCIRC will not run. Writing files to disk...'
+        "ADCIRC binaries were not found in PATH. "
+        "ADCIRC will not run. Writing files to disk..."
     )
     driver.write(OUTPUT_DIRECTORY, overwrite=True)
 ```
@@ -296,20 +296,20 @@ from adcircpy.forcing.winds import BestTrackForcing
 from adcircpy.server import SlurmConfig
 from adcircpy.utilities import download_mesh
 
-DATA_DIRECTORY = Path(__file__).parent.absolute() / 'data'
-INPUT_DIRECTORY = DATA_DIRECTORY / 'input'
-OUTPUT_DIRECTORY = DATA_DIRECTORY / 'output' / 'example_3'
+DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
+INPUT_DIRECTORY = DATA_DIRECTORY / "input"
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_3"
 
-MESH_DIRECTORY = INPUT_DIRECTORY / 'shinnecock'
+MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"
 
 download_mesh(
-    url='https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1',
+    url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",
     directory=MESH_DIRECTORY,
-    known_hash='99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4',
+    known_hash="99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4",
 )
 
 # open mesh file
-mesh = AdcircMesh.open(MESH_DIRECTORY / 'fort.14', crs=4326)
+mesh = AdcircMesh.open(MESH_DIRECTORY / "fort.14", crs=4326)
 
 # initialize tidal forcing and constituents
 tidal_forcing = Tides()
@@ -317,21 +317,21 @@ tidal_forcing.use_all()
 mesh.add_forcing(tidal_forcing)
 
 # initialize wind forcing
-wind_forcing = BestTrackForcing('Sandy2012')
+wind_forcing = BestTrackForcing("Sandy2012")
 mesh.add_forcing(wind_forcing)
 
 # initialize Slurm configuration
 slurm = SlurmConfig(
-    account='account',
+    account="account",
     ntasks=1000,
-    run_name='adcircpy/examples/example_3.py',
-    partition='partition',
+    run_name="adcircpy/examples/example_3.py",
+    partition="partition",
     walltime=timedelta(hours=8),
-    mail_type='all',
-    mail_user='example@email.gov',
-    log_filename='example_3.log',
-    modules=['intel/2020', 'impi/2020', 'netcdf/4.7.2-parallel'],
-    path_prefix='$HOME/adcirc/build',
+    mail_type="all",
+    mail_user="example@email.gov",
+    log_filename="example_3.log",
+    modules=["intel/2020", "impi/2020", "netcdf/4.7.2-parallel"],
+    path_prefix="$HOME/adcirc/build",
 )
 
 # set simulation dates
@@ -361,20 +361,20 @@ from adcircpy.forcing.winds.atmesh import AtmosphericMeshForcing
 from adcircpy.server import SlurmConfig
 from adcircpy.utilities import download_mesh
 
-DATA_DIRECTORY = Path(__file__).parent.absolute() / 'data'
-INPUT_DIRECTORY = DATA_DIRECTORY / 'input'
-OUTPUT_DIRECTORY = DATA_DIRECTORY / 'output' / 'example_4'
+DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
+INPUT_DIRECTORY = DATA_DIRECTORY / "input"
+OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_4"
 
-MESH_DIRECTORY = INPUT_DIRECTORY / 'shinnecock'
+MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"
 
 download_mesh(
-    url='https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1',
+    url="https://www.dropbox.com/s/1wk91r67cacf132/NetCDF_shinnecock_inlet.tar.bz2?dl=1",
     directory=MESH_DIRECTORY,
-    known_hash='99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4',
+    known_hash="99d764541983bfee60d4176af48ed803d427dea61243fa22d3f4003ebcec98f4",
 )
 
 # open mesh file
-mesh = AdcircMesh.open(MESH_DIRECTORY / 'fort.14', crs=4326)
+mesh = AdcircMesh.open(MESH_DIRECTORY / "fort.14", crs=4326)
 
 # initialize tidal forcing and constituents
 tidal_forcing = Tides()
@@ -383,28 +383,28 @@ mesh.add_forcing(tidal_forcing)
 
 # initialize atmospheric mesh forcings (for NUOPC coupling)
 wind_forcing = AtmosphericMeshForcing(
-    filename='Wind_HWRF_SANDY_Nov2018_ExtendedSmoothT.nc', nws=17, interval_seconds=3600,
+    filename="Wind_HWRF_SANDY_Nov2018_ExtendedSmoothT.nc", nws=17, interval_seconds=3600,
 )
 mesh.add_forcing(wind_forcing)
 
 # initialize wave mesh forcings (for NUOPC coupling)
 wave_forcing = WaveWatch3DataForcing(
-    filename='ww3.HWRF.NOV2018.2012_sxy.nc', nrs=5, interval_seconds=3600,
+    filename="ww3.HWRF.NOV2018.2012_sxy.nc", nrs=5, interval_seconds=3600,
 )
 mesh.add_forcing(wave_forcing)
 
 # initialize Slurm configuration
 slurm = SlurmConfig(
-    account='account',
+    account="account",
     ntasks=1000,
-    run_name='adcircpy/examples/example_4.py',
-    partition='partition',
+    run_name="adcircpy/examples/example_4.py",
+    partition="partition",
     walltime=timedelta(hours=8),
-    mail_type='all',
-    mail_user='example@email.gov',
-    log_filename='example_4.log',
-    modules=['intel/2020', 'impi/2020', 'netcdf/4.7.2-parallel'],
-    path_prefix='$HOME/adcirc/build',
+    mail_type="all",
+    mail_user="example@email.gov",
+    log_filename="example_4.log",
+    modules=["intel/2020", "impi/2020", "netcdf/4.7.2-parallel"],
+    path_prefix="$HOME/adcirc/build",
 )
 
 # instantiate driver object

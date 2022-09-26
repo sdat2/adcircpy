@@ -10,9 +10,13 @@ DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
 INPUT_DIRECTORY = DATA_DIRECTORY / "input"
 OUTPUT_DIRECTORY = DATA_DIRECTORY / "output" / "example_3"
 import os
+
+
 def mkdir(dir):
     if not os.path.exists(dir):
         os.mkdir(dir)
+
+
 mkdir(OUTPUT_DIRECTORY)
 
 MESH_DIRECTORY = INPUT_DIRECTORY / "shinnecock"

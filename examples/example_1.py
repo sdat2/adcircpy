@@ -13,9 +13,11 @@ import warnings
 from adcircpy import AdcircMesh, AdcircRun, Tides
 from adcircpy.utilities import download_mesh
 
+
 def mkdir(dir):
     if not os.path.exists(dir):
         os.mkdir(dir)
+
 
 DATA_DIRECTORY = Path(__file__).parent.absolute() / "data"
 mkdir(DATA_DIRECTORY)

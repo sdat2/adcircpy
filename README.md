@@ -30,7 +30,10 @@ You may install the application though pip. This will install the latest tagged 
 <!--pytest-codeblocks:skip-->
 
 ```bash
+module load cray-python
+pip install --user .
 pip install adcircpy
+pip install --upgrade xarray==2022.3.0
 ```
 
 Alternatively, you many manually install the repo by cloning it and then running
@@ -85,6 +88,21 @@ best_track_run \
     --fort13=/path/to/your/fort.13 \
     --crs=EPSG:4326 \
     --output-directory=/path/where/you/want/the/files \
+    --constituents=all \
+    --spinup-days=15.0 \
+    --elev=30. \
+    --mete=30. \
+    --velo=30. \
+    --skip-run
+
+
+mkdir output
+
+best_track_run \
+    input/fort.14 \
+    Sandy2012 \
+    --crs=EPSG:4326 \
+    --output-directory=output \
     --constituents=all \
     --spinup-days=15.0 \
     --elev=30. \
